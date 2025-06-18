@@ -157,12 +157,13 @@ try_require('leap').set_default_mappings()
 -- fzf.lua
 -- files/directories to ignore when searching for files
 local ignore_patterns = {
-    { value = '.git',         is_dir = true },
-    { value = '.ruff_cache',  is_dir = true },
-    { value = '.venv',        is_dir = true },
-    { value = '.tox',         is_dir = true },
-    { value = '__pycache__',  is_dir = true },
-    { value = 'node_modules', is_dir = true },
+    { value = '.git',          is_dir = true },
+    { value = '.pytest_cache', is_dir = true },
+    { value = '.ruff_cache',   is_dir = true },
+    { value = '.venv',         is_dir = true },
+    { value = '.tox',          is_dir = true },
+    { value = '__pycache__',   is_dir = true },
+    { value = 'node_modules',  is_dir = true },
 }
 local fzf_find_opts = { '-type', 'f' }
 local fzf_rg_opts = { '--color=never', '--hidden', '--no-ignore', '--files' }
@@ -227,6 +228,7 @@ try_require('nvim-tree').setup({
     filters = {
         git_ignored = false,
         custom = {
+            '.pytest_cache',
             '.ruff_cache',
             '.tox',
             '.venv',
