@@ -3,8 +3,8 @@
 -------------------------------------------------------------------------------
 
 local function setup_mason()
-    local mason_ok, mason = pcall(require, 'mason')
-    if not mason_ok then
+    local ok, mason = pcall(require, 'mason')
+    if not ok then
         vim.notify('mason not found')
         return
     end
@@ -17,9 +17,12 @@ local function setup_mason()
             },
         },
     })
+end
 
-    local mlc_ok, mason_lsp_config = pcall(require, 'mason-lspconfig')
-    if not mlc_ok then
+
+local function setup_mason_lspconfig()
+    local ok, mason_lsp_config = pcall(require, 'mason-lspconfig')
+    if not ok then
         vim.notify('mason-lspconfig not found')
         return
     end
@@ -254,8 +257,9 @@ end
 
 return {
     setup = function()
-        setup_mason()
         setup_lsp_config()
+        setup_mason()
+        setup_mason_lspconfig()
         setup_completion()
     end
 }
