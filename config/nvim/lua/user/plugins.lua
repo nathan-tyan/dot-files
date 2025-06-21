@@ -328,3 +328,4 @@ conform.setup({
     },
 })
 vim.keymap.set('v', '<leader>f', conform.format, keymap_opts)
+vim.api.nvim_create_user_command('Format', function() conform.format() end, {})
