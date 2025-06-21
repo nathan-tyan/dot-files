@@ -39,8 +39,8 @@ style = 'bright-yellow'
 
 [git_status]
 conflicted = '><'
-ahead = '>>$ahead_count'
-behind = '<<$behind_count'
+ahead = '>>$count'
+behind = '$count<<'
 diverged = '<<$behind_count>>$ahead_count'
 up_to_date = ''
 untracked = '?$count'
