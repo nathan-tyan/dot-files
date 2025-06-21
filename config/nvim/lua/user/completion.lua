@@ -41,7 +41,7 @@ local function setup()
             documentation = cmp.config.window.bordered(),
         },
         snippet = {
-            expand = function (args)
+            expand = function(args)
                 if luasnip_ok then
                     luasnip.lsp_expand(args.body)
                 end
@@ -51,7 +51,7 @@ local function setup()
             ghost_text = true,
         },
     })
-    cmp.setup.cmdline({'/', '?'}, {
+    cmp.setup.cmdline({ '/', '?' }, {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
             { name = 'buffer' },

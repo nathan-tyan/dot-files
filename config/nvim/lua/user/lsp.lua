@@ -44,7 +44,7 @@ local function on_attach(_, bufnr)
     map('n', 'gd', vim.lsp.buf.definition, 'go to definition')
     map('n', 'K', vim.lsp.buf.hover, 'hover documentation')
     map('n', '<leader>rn', vim.lsp.buf.rename, 'rename symbol')
-    map({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, 'code action')
+    map({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, 'code action')
 
     -- diagnostics
     remap('n', '<leader>d[', '[d', 'previous diagnostic')
@@ -118,7 +118,7 @@ local function setup_lsp_config()
                     version = 'LuaJIT',
                 },
                 diagnostics = {
-                    globals = {'vim'},
+                    globals = { 'vim' },
                 },
                 workspace = {
                     library = vim.api.nvim_get_runtime_file('', true),

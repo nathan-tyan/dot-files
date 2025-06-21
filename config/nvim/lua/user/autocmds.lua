@@ -9,7 +9,7 @@ local myGroup = augroup('MyGroup', { clear = true })
 autocmd('InsertEnter', {
     pattern = '*',
     group = myGroup,
-    callback = function ()
+    callback = function()
         vim.wo.list = false
     end,
 })
@@ -17,8 +17,7 @@ autocmd('InsertEnter', {
 autocmd('InsertLeave', {
     pattern = '*',
     group = myGroup,
-    callback = function ()
+    callback = function()
         vim.wo.list = true
     end,
 })
-
