@@ -31,8 +31,8 @@ Plug('lewis6991/gitsigns.nvim', { tag = 'v1.0.2' })
 -- LSP
 Plug('neovim/nvim-lspconfig', { tag = 'v2.2.0' })
 Plug('mason-org/mason.nvim', { tag = 'v2.0.0' })
-Plug('mason-org/mason-lspconfig.nvim', { tag = 'v2.0.0' })
 
+-- completion
 Plug('hrsh7th/nvim-cmp', { tag = 'v0.0.2' })
 Plug('hrsh7th/cmp-nvim-lsp')
 Plug('hrsh7th/cmp-buffer')
@@ -44,6 +44,9 @@ Plug('L3MON4D3/LuaSnip', {
     ['do'] = 'make install_jsregexp'
 })
 Plug('saadparwaiz1/cmp_luasnip')
+
+-- formatting
+Plug('stevearc/conform.nvim', { tag = 'v9.0.0' })
 
 vim.call('plug#end')
 
@@ -297,3 +300,31 @@ vim.keymap.set('n', '<leader>gl', '<cmd>Gitsigns blame_line<cr>', keymap_opts)
 
 -- LSP
 try_require('user.lsp').setup()
+
+-- completion
+try_require('user.completion').setup()
+
+-- conform.nvim
+local conform = try_require('conform')
+conform.setup({
+    default_format_opts = {
+        lsp_format = 'fallback',
+    },
+    format_on_save = nil,
+    format_after_save = nil,
+    formatters_by_ft = {
+        python = {'ruff_format'},
+        sh = {'shfmt'},
+    },
+    formatters = {
+        ruff_format = {
+            inherit = true,
+            append_args = {
+                '--line-length', '79',
+                '--config', 'format.quote-style = "single"',
+                '--config', 'format.skip-magic-trailing-comma = true',
+            },
+        },
+    },
+})
+vim.keymap.set('v', '<leader>f', conform.format, keymap_opts)

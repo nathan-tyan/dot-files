@@ -20,24 +20,6 @@ local function setup_mason()
 end
 
 
-local function setup_mason_lspconfig()
-    local ok, mason_lsp_config = pcall(require, 'mason-lspconfig')
-    if not ok then
-        vim.notify('mason-lspconfig not found')
-        return
-    end
-    mason_lsp_config.setup({
-        automatic_enable = true,
-        ensure_installed = {
-            'basedpyright',
-            'bashls',
-            'lua_ls',
-            'ruff',
-        },
-    })
-end
-
-
 local function on_attach(_, bufnr)
     local function map(mode, lhs, rhs, desc)
         local opts = {
@@ -69,11 +51,6 @@ local function on_attach(_, bufnr)
     remap('n', '<leader>d]', ']d', 'next diagnostic')
     map('n', '<leader>dl', vim.diagnostic.setloclist, 'open diagnostics list')
     map('n', '<leader>do', vim.diagnostic.open_float, 'show diagnostic float')
-
-    -- formatting
-    map({'n', 'v'}, '<leader>lf', function ()
-        vim.lsp.buf.format({ async = true })
-    end, 'format code')
 end
 
 
@@ -158,25 +135,13 @@ local function setup_lsp_config()
         },
     })
 
-    -- ruff
-    vim.lsp.config('ruff', {
-        init_options = {
-            settings = {
-                lineLength = 79,
-                configuration = {
-                    format = {
-                        ["quote-style"] = 'single',
-                    },
-                },
-                organizeImports = true,
-                lint = {
-                    enable = false,
-                },
-            },
-        },
-    })
+    vim.lsp.enable('basedpyright')
+    vim.lsp.enable('bashls')
+    vim.lsp.enable('lua_ls')
+end
 
-    -- diagnostic
+
+local function setup()
     vim.diagnostic.config({
         underline = true,
         virtual_text = true,
@@ -184,82 +149,9 @@ local function setup_lsp_config()
         update_in_insert = false,
         severity_sort = true,
     })
+    setup_lsp_config()
+    setup_mason()
 end
 
 
-local function setup_completion()
-    local cmp_ok, cmp = pcall(require, 'cmp')
-    if not cmp_ok then
-        vim.notify('nvim-cmp not found')
-        return
-    end
-
-    local luasnip_ok, luasnip = pcall(require, 'luasnip')
-    if not luasnip_ok then
-        vim.notify('luasnip not found')
-    end
-
-    local select_opts = { behavior = cmp.SelectBehavior.Select }
-    cmp.setup({
-        sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
-            { name = 'buffer' },
-            { name = 'path' },
-            { name = 'luasnip' },
-        }),
-        mapping = cmp.mapping.preset.insert({
-            ['<c-j>'] = cmp.mapping.scroll_docs(1),
-            ['<c-k>'] = cmp.mapping.scroll_docs(-1),
-            ['<c-n>'] = cmp.mapping.select_next_item(select_opts),
-            ['<c-p>'] = cmp.mapping.select_prev_item(select_opts),
-            ['<tab>'] = cmp.mapping.confirm({
-                select = true,
-                behavior = cmp.ConfirmBehavior.Replace,
-            }),
-        }),
-        preselect = cmp.PreselectMode.Item,
-        completion = {
-            keyword_length = 0,
-        },
-        window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-        },
-        snippet = {
-            expand = function (args)
-                if luasnip_ok then
-                    luasnip.lsp_expand(args.body)
-                end
-            end,
-        },
-        experimental = {
-            ghost_text = true,
-        },
-    })
-    cmp.setup.cmdline({'/', '?'}, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'buffer' },
-        },
-    })
-    cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        completion = {
-            keyword_length = 2,
-        },
-        sources = {
-            { name = 'path' },
-            { name = 'cmdline' },
-        },
-    })
-end
-
-
-return {
-    setup = function()
-        setup_lsp_config()
-        setup_mason()
-        setup_mason_lspconfig()
-        setup_completion()
-    end
-}
+return { setup = setup }
