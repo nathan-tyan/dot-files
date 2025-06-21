@@ -27,14 +27,15 @@ local function setup_mason()
         automatic_enable = true,
         ensure_installed = {
             'basedpyright',
-            'ruff',
+            'bashls',
             'lua_ls',
+            'ruff',
         },
     })
 end
 
 
-local function on_attach(client, bufnr)
+local function on_attach(_, bufnr)
     local function map(mode, lhs, rhs, desc)
         local opts = {
             noremap = true,
